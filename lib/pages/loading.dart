@@ -14,13 +14,17 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
 
-  void getData() async {
-    final Uri url = Uri.parse('https://jsonplaceholder.typicode.com/todos/1');
+  void getTime() async {
+    // final Uri url = Uri.parse('https://jsonplaceholder.typicode.com/todos/1');
+    // http.Response response = await http.get(url);
+    // Map data = jsonDecode(response.body);
+    // print(data);
+    // print(data['title']);
+
+    final Uri url = Uri.parse('https://worldtimeapi.org/api/timezone/Asia/Kolkata');
     http.Response response = await http.get(url);
     Map data = jsonDecode(response.body);
     print(data);
-    print(data['title']);
-    
 
   }
 
@@ -29,7 +33,7 @@ class _LoadingState extends State<Loading> {
   @override
   void initState() {
     super.initState();
-      getData();  
+      getTime();  
     }
 
 
