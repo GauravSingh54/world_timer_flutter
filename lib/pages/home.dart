@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -12,49 +14,66 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    data = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     print(data);
 
     // set background
     String bgImage = data['isDayTime'] ? 'assets/day.jpg' : 'assets/night.jpg';
+    Color bgColor = data['isDayTime'] ? Colors.blue : Colors.black;
+    Color textColor = data['isDayTime'] ? Colors.black : Colors.white;
 
     return Scaffold(
+      backgroundColor: bgColor,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/day.jpg'),
-              fit: BoxFit.cover,
-            )
-          ),
+              image: DecorationImage(
+            image: AssetImage(bgImage),
+            fit: BoxFit.cover,
+          )),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 120, 0, 0),
             child: Column(
               children: [
                 TextButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/location');
+                  onPressed: () async {
+                    dynamic result = await Navigator.pushNamed(context, '/location');
+                    setState(() {
+                      data = {
+                        'time' : result['time'],
+                        'location' : result['location'],
+                        'isDayTime' : result['isDayTime'],
+                        'flag' : result['flag'],
+                      };
+                    });
                   },
-                  icon: Icon(Icons.edit_location),
-                  label: Text('Edit Location'),
+                  icon: Icon(Icons.edit_location, color: textColor),
+                  label: Text(
+                    'Edit Location',
+                    style: TextStyle(color: textColor),
+                  ),
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       data['location'],
                       style: TextStyle(
+                        color: textColor,
                         fontSize: 28,
                         letterSpacing: 2,
                       ),
                     )
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   data['time'],
                   style: TextStyle(
+                    color: textColor,
                     fontSize: 66,
                   ),
                 ),
