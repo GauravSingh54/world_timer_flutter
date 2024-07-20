@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
+
 
 
 class WorldTime {
@@ -8,7 +10,9 @@ class WorldTime {
   late String location;  //location name for the UI
   late String time; //Time in that location
   late String flag; // URL to asset flag icon
-  late String url; // location url for api end point
+  late String url;  // location url for api end point
+  late bool isDayTime; // true or false if daytime or not
+
 
   WorldTime({ required this.location, required this.flag, required this.url});
 
@@ -56,7 +60,8 @@ class WorldTime {
         now = now.add(offsetDuration);
       }
 
-      time = now.toString();
+      isDayTime = now.hour > 6 && now.hour < 20 ? true : false;
+      time = DateFormat.jm().format(now);
 
       print('Current Time: $now');
     } else {
